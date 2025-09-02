@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pushpendra.dev - Under Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Stars Background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+
+        .star:nth-child(odd) {
+            animation-delay: 1s;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4ecdc4;
+            text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+        }
+
+        /* Main Content */
+        .main-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 50px 50px;
+            z-index: 10;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInDown 1s ease-out;
+        }
+
+        .hero-section .subtitle {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 30px;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .development-status {
+            background: rgba(78, 205, 196, 0.1);
+            border: 2px solid #4ecdc4;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: #4ecdc4;
+            font-weight: 600;
+            margin-bottom: 40px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Laptop Animation */
+        .laptop-container {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .laptop {
+            width: 400px;
+            height: 250px;
+            perspective: 1000px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .laptop-base {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(135deg, #333, #555);
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            bottom: 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .laptop-screen {
+            width: 90%;
+            height: 200px;
+            background: #0d1117;
+            border: 8px solid #333;
+            border-radius: 10px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            animation: screenGlow 2s ease-in-out infinite alternate;
+            box-shadow: inset 0 0 20px rgba(78, 205, 196, 0.2);
+        }
+
+        .screen-content {
+            padding: 15px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background: #1e2328;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 6px;
+            margin-right: 10px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-button.close { background: #ff5f56; }
+        .terminal-button.minimize { background: #ffbd2e; }
+        .terminal-button.maximize { background: #27ca3f; }
+
+        .terminal-title {
+            font-size: 11px;
+            color: #a0aec0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-container {
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .code-line {
+            opacity: 0;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .code-line.typing {
+            animation: typeText 2s steps(50) forwards;
+        }
+
+        .code-line.visible {
+            opacity: 1;
+        }
+
+        /* Syntax highlighting colors */
+        .keyword { color: #ff6b6b; }
+        .string { color: #4ecdc4; }
+        .comment { color: #95a5a6; }
+        .method { color: #a29bfe; }
+        .variable { color: #74b9ff; }
+        .operator { color: #fd79a8; }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 14px;
+            background: #4ecdc4;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes typeText {
+            from {
+                width: 0;
+                opacity: 1;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+
+
+        /* Progress Bar */
+        .progress-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4, #44a08d);
+            border-radius: 3px;
+            animation: loading 3s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes screenGlow {
+            0% { box-shadow: 0 0 20px rgba(78, 205, 196, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(78, 205, 196, 0.6); }
+        }
+
+        @keyframes typeWriter {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .laptop {
+                width: 300px;
+                height: 200px;
+            }
+            
+            .laptop-screen {
+                height: 160px;
+            }
+            
+            .code-lines {
+                font-size: 10px;
+            }
+            
+            .main-container {
+                padding: 80px 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Pushpendra.dev</div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="hero-section">
+            <h1>Developer Pushpendra</h1>
+            <p class="subtitle">Full-Stack Developer</p>
+            <div class="development-status">
+                🚧 Website Under Development 🚧
+            </div>
+        </div>
+
+        <!-- Animated Laptop -->
+        <div class="laptop-container">
+            <div class="laptop">
+                <div class="laptop-screen">
+                    <div class="screen-content">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <div class="terminal-button close"></div>
+                                <div class="terminal-button minimize"></div>
+                                <div class="terminal-button maximize"></div>
+                            </div>
+                            <div class="terminal-title">dev.js - JavaScript</div>
+                        </div>
+                        <div class="code-container">
+                            <div class="code-line" id="line1"></div>
+                            <div class="code-line" id="line2"></div>
+                            <div class="code-line" id="line3"></div>
+                            <div class="code-line" id="line4"></div>
+                            <div class="code-line" id="line5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="laptop-base"></div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <p style="color: #ccc; margin-top: 20px; font-size: 1.1rem;">
+            Building something awesome for you! Stay tuned.
+        </p>
+    </div>
+
+    <script>
+        // TypeScript code animation
+        function animateTypescript() {
+            const lines = [
+                {
+                    element: document.getElementById('line1'),
+                    html: '<span class="variable">console</span>.<span class="method">log</span>(<span class="string">"Building amazing things..."</span>);',
+                    delay: 1000
+                },
+                {
+                    element: document.getElementById('line2'),
+                    html: '<span class="keyword">const</span> <span class="variable">status</span> <span class="operator">=</span> <span class="string">"under-development"</span>;',
+                    delay: 0 // Will be calculated after previous line completes
+                },
+                {
+                    element: document.getElementById('line3'),
+                    html: '<span class="variable">pushpendra</span>.<span class="method">createWebsite</span>();',
+                    delay: 0 // Will be calculated after previous line completes
+                },
+                {
+                    element: document.getElementById('line4'),
+                    html: '<span class="comment">// Coming soon...</span>',
+                    delay: 0 // Will be calculated after previous line completes
+                },
+                {
+                    element: document.getElementById('line5'),
+                    html: '<span class="typing-cursor"></span>',
+                    delay: 0 // Will be calculated after previous line completes
+                }
+            ];
+
+            let currentDelay = 0;
+
+            // Function to animate each line sequentially
+            function animateLine(index) {
+                if (index >= lines.length) {
+                    // Restart animation after 8 seconds
+                    setTimeout(() => {
+                        // Clear all lines
+                        lines.forEach(line => {
+                            line.element.innerHTML = '';
+                            line.element.style.opacity = '0';
+                        });
+                        // Restart animation
+                        animateTypescript();
+                    }, 8000);
+                    return;
+                }
+
+                const line = lines[index];
+                const isLastLine = index === lines.length - 1;
+
+                setTimeout(() => {
+                    if (isLastLine) {
+                        // Just show cursor for last line
+                        line.element.innerHTML = line.html;
+                        line.element.style.opacity = '1';
+                        animateLine(index + 1);
+                    } else {
+                        // Type the line and wait for completion
+                        typeText(line.element, line.html, 60, () => {
+                            // Wait 800ms before starting next line
+                            setTimeout(() => {
+                                animateLine(index + 1);
+                            }, 800);
+                        });
+                    }
+                }, index === 0 ? line.delay : 0);
+            }
+
+            // Start the sequential animation
+            animateLine(0);
+        }
+
+        function typeText(element, html, speed, callback) {
+            element.style.opacity = '1';
+            let i = 0;
+            let displayText = '';
+            let inTag = false;
+            let currentTag = '';
+
+            function typeChar() {
+                if (i < html.length) {
+                    const char = html[i];
+                    
+                    if (char === '<') {
+                        inTag = true;
+                        currentTag = char;
+                    } else if (char === '>' && inTag) {
+                        inTag = false;
+                        currentTag += char;
+                        displayText += currentTag;
+                        currentTag = '';
+                    } else if (inTag) {
+                        currentTag += char;
+                    } else {
+                        displayText += char;
+                    }
+                    
+                    if (!inTag || char === '>') {
+                        element.innerHTML = displayText + '<span class="typing-cursor"></span>';
+                        setTimeout(typeChar, speed);
+                    } else {
+                        setTimeout(typeChar, 0); // Skip delay for tags
+                    }
+                    i++;
+                } else {
+                    // Remove typing cursor when done and call callback
+                    element.innerHTML = displayText;
+                    if (callback) callback();
+                }
+            }
+            
+            typeChar();
+        }
+
+        // Generate random stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 50;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // Random animation delay
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            // Disable F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+I (Dev Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+J (Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Disable Ctrl+Shift+C (Select Element)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Additional protection - detect if developer tools are open
+        let devtools = {
+            open: false,
+            orientation: null
+        };
+
+        setInterval(function() {
+            if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+                if (!devtools.open) {
+                    devtools.open = true;
+                    // Optionally redirect or show warning
+                    document.body.innerHTML = '<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a2e; color: #4ecdc4; display: flex; align-items: center; justify-content: center; font-size: 24px; z-index: 9999;">Developer tools detected. Please close them to continue.</div>';
+                }
+            } else {
+                devtools.open = false;
+            }
+        }, 500);
+
+        // Initialize everything on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            animateTypescript();
+        });
+    </script>
+</body>
+</html>
